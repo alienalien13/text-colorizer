@@ -60,48 +60,71 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */,
-/* 2 */,
-/* 3 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(4);
+module.exports = __webpack_require__(1);
 
 
 /***/ }),
-/* 4 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(5);
+__webpack_require__(2);
 
-// global functions
+// aux functions
 var getById = function getById(id) {
 	return document.getElementById(id);
 },
     getByClass = function getByClass(className) {
 	return document.getElementsByClassName(className);
 },
-    log = console.log,
-    init = function init() {
+    log = console.log;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+// addons
+var trim = function trim(str) {
+	return str.replace(/^\s+|\s+$/g, "");
+};
+// - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+// global funcs
+var init = function init() {
+
 	// DOM elements
 	var text = getById('text'),
 	    colors = getById('colors'),
 	    accept = getById('accept');
-	//
-	var symbolNumber = 0,
-	    actualColor = 0;
+
 	// main function
 	function textTransform() {
+
 		// input text
 		var string = text.innerText.split(' ');
+
+		var actualColor = 0;
+
+		// set random color from colors-arguments
+		function setColor(gotten_colors) {
+
+			function getRandom() {
+				var rand = Math.floor(Math.random() * gotten_colors.length);
+				if (rand === actualColor) return getRandom();else return rand;
+			}
+
+			actualColor = getRandom();
+			return gotten_colors[actualColor];
+		}
+
 		/*
   	output text
   	each word in string to array of letters
@@ -111,45 +134,33 @@ var getById = function getById(id) {
   */
 		var newStr = string.map(function (word) {
 			return word.split('').map(function (symbol) {
-				return '<span class=\'all-symbols\'>' + symbol + '</span>';
+
+				return '<span style="color: ' + setColor(['red', 'blue', 'green', 'black', 'yellow']) + '">' + symbol + '</span>';
 			}).join('');
 		}).join(' ');
 
 		getById('text2').innerHTML = newStr;
 
-		setColors(['red', 'blue', 'green', 'black', 'yellow']);
+		log(getColors(getById('colors').value));
 	}
 
 	accept.addEventListener('click', textTransform);
-
-	function setColors(gotten_colors) {
-
-		var pervColor = '',
-		    actualSymbol = getByClass('all-symbols')[symbolNumber],
-		    symbolsAmount = getByClass('all-symbols').length;
-
-		var numb = 0;
-
-		function getRandom() {
-			var rand = Math.floor(Math.random() * gotten_colors.length);
-			if (rand === actualColor) return getRandom();else return rand;
-		}
-
-		numb = getRandom();
-
-		actualColor = numb;
-		actualSymbol.style.color = gotten_colors[numb];
-
-		symbolNumber++;
-
-		symbolNumber < symbolsAmount ? setColors(gotten_colors) : symbolNumber = 0;
-	}
 };
+
+var getColors = function getColors(inputColorsList) {
+
+	return trim(inputColorsList.split('').map(function (item) {
+
+		if (item === ',' || item === ';' || item === '') return ' ';else return item;
+	}).join(''));
+};
+
+// - - - - - - - - - - - - - - - - - -
 
 window.addEventListener('load', init);
 
 /***/ }),
-/* 5 */
+/* 2 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

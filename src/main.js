@@ -1,64 +1,85 @@
 import './styles.sass'
 
-// global functions
+
+
+// aux functions
 const getById = id => document.getElementById(id),
 	getByClass = className => document.getElementsByClassName(className),
-	log = console.log,
-	init = function() {
-		// DOM elements
-		const text = getById('text'),
-			colors = getById('colors'),
-			accept = getById('accept');
-		//
-		var symbolNumber = 0,
-			actualColor = 0;
-		// main function
-		function textTransform(){
-			// input text
-			const string = text.innerText.split(' ');
-			/*
-				output text
-				each word in string to array of letters
-				each letter to span
-				join letters back to words
-				join words separated by ' '
-			*/
-			const newStr = string.map( word => word.split('').map( symbol =>
-				`<span class='all-symbols'>${symbol}</span>`
-			).join('')).join(' ');
+	log = console.log;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-			getById('text2').innerHTML = newStr;
 
-			setColors(['red', 'blue', 'green', 'black', 'yellow']);
-		}
 
-		accept.addEventListener('click', textTransform);
-		
-		function setColors(gotten_colors){
-			
-			const pervColor = '',
-				actualSymbol = getByClass('all-symbols')[symbolNumber],
-				symbolsAmount = getByClass('all-symbols').length;
-			
-			var numb = 0;
+// addons
+const trim = str => str.replace(/^\s+|\s+$/g, "");
+// - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+// global funcs
+const init = () => {
+
+	// DOM elements
+	const text = getById('text'),
+		colors = getById('colors'),
+		accept = getById('accept');
+
+	// main function
+	function textTransform(){
+
+		// input text
+		const string = text.innerText.split(' ');
+
+		let actualColor = 0;
+
+		// set random color from colors-arguments
+		function setColor(gotten_colors){
 			
 			function getRandom(){
-				var rand = Math.floor( Math.random() * (gotten_colors.length) );
+				let rand = Math.floor( Math.random() * (gotten_colors.length) );
 				if (rand === actualColor) return getRandom()
 				else return rand
 			}
-			
-			numb = getRandom();
 
-			actualColor = numb;			
-			actualSymbol.style.color = gotten_colors[numb];
-
-			symbolNumber++;
-
-			(symbolNumber < symbolsAmount) ? setColors(gotten_colors) : symbolNumber = 0
+			actualColor = getRandom();			
+			return gotten_colors[actualColor];
 
 		}
 
+		/*
+			output text
+			each word in string to array of letters
+			each letter to span
+			join letters back to words
+			join words separated by ' '
+		*/
+		const newStr = string.map( word => word.split('').map( symbol => {
+
+			return `<span style="color: ${setColor(['red', 'blue', 'green', 'black', 'yellow'])}">${symbol}</span>`;
+
+		} ).join('') ).join(' ');
+
+		getById('text2').innerHTML = newStr;
+
+		log( getColors(getById('colors').value) )
 	}
 
+	accept.addEventListener('click', textTransform);
+
+}
+
+const getColors = inputColorsList => {
+
+	return trim( inputColorsList.split('').map( item => {
+
+		if (item === ',' || item === ';' || item === '') return ' '
+		else return item
+
+	} ).join('') )
+
+}
+
+// - - - - - - - - - - - - - - - - - -
+
 window.addEventListener('load', init);
+
