@@ -12,80 +12,78 @@ const getById = id => document.getElementById(id),
 // global funcs
 const init = () => {
 
-	// DOM elements / their values
-	const text = getById('text').innerText,
-		accept = getById('accept');
+	const string = getById('text').innerText.split(' '), // input text
+		accept = getById('accept'); // accept button
 
 	// main function
-	function textTransform(){
+	function textTransform(colors){
 
-		// input text
-		const string = text.split(' ');
-
-		let actualColor = 0;
+		let actualColor = 0 // actualColor value init
 
 		// set random color from colors-arguments
-		function setColor(gotten_colors){
-			
+		function setColor(gottenColors){
+
 			function getRandom(){
-				let rand = Math.floor( Math.random() * (gotten_colors.length) );
+				let rand = Math.floor( Math.random() * (gottenColors.length) );
 				if (rand === actualColor) return getRandom()
 				else return rand
 			}
 
-			/* (gotten_colors.length < 2) ? actualColor = 0 :  */actualColor = getRandom();			
-			return gotten_colors[actualColor];
+			if (gottenColors.length > 1) {
+				actualColor = getRandom();
+				return gottenColors[actualColor]
+			} else if (gottenColors.length === 1) return gottenColors[0]
 
 		}
 
-		/*
-			output text
-			each word in string to array of letters
-			each letter to span
-			join letters back to words
-			join words separated by ' '
-		*/
-		const newStr = string.map( word =>
-			word.split('')
-			.map( symbol =>
+		const newString = string.map( word => // words array
+			word.split('') // symbols array
+				.map( symbol =>
 
-				`<span style="color: ${setColor( getColors( getById('colors').value ) )}">${symbol}</span>`
+					`<span style="color: ${setColor(colors)}">${symbol}</span>`
 
-			)
-			.join('') )
-			.join(' ');
+				) // transform symbol to <span>
+				.join('') ) // join symbols to words
+				.join(' '); // join words to string
 
-		getById('text2').innerHTML = newStr;
+		getById('text').innerHTML = newString;
 
-		log(getColors( getById('colors').value ))
 	}
 
-	accept.addEventListener('click', textTransform);
+	accept.addEventListener('click', function(){
+
+		let allowedColors = ['red', 'black', 'gray', 'green', 'yellow', 'silver', 'blue', 'gold', 'white'],
+			unexpectedSymbols = (getById('colors').value.match(/[^a-zA-Z\s\n,;\u000A]/ig));
+
+		(unexpectedSymbols || !getById('colors').value) ?
+		log('ERROR', unexpectedSymbols ? new Set(unexpectedSymbols) :'EMPTY') :
+		textTransform( getColors( getById('colors').value , allowedColors) );
+
+		log( getColors( getById('colors').value, allowedColors ) )
+
+	});
 
 }
 
 // getting colors array from input textarea
-const getColors = inputColorsList => {
+const getColors = (inputColorsList, allowableColors) => Array.from(
 
-	let newList = inputColorsList
-		.split('')
-		.map( item => 
+	new Set(
+		inputColorsList
+			.split('') // symbols array
+			.map( symbol => 
 
-			(item === ',' || item === ';' || item === '\u000A') ?
-			' ' :
-			item
+				(symbol === ',' || symbol === ';' || symbol === '\u000A') ?
+				' ' :
+				symbol
 
+			) // replace ',' ';' and 'line break' with spacees
+			.join('') // get single line string
+			.split(' ') // get words
+			.filter( item => item !== '' && allowableColors.indexOf(item) !== -1) // filter empty items in array and just allowed colors
 		)
-		.join('')
-		.split(' ')
-		.filter( item => item !== '')
-
-	let colorsList = new Set(newList)
-
-	return Array.from(colorsList)
-
-}
+	)
+		
 // - - - - - - - - - - - - - - - - - -
 
 window.addEventListener('load', init);
-

@@ -3,13 +3,42 @@ body
 	height: 100%
 	margin: 0
 	padding: 0
+	display: grid
+	grid-template: 100px 40px 40px 0.5fr 0.5fr 50px / 0.5fr 30% 30% 0.5fr
+	grid-gap: 10px
 
-.main
-	&__input-colors
+	header
+		grid-area: 1 / 1 / 2 / 6
+		background-color: silver
+	
+	.errors
+		grid-area: 2 / 2 / 3 / 4
+		background-color: black
+		text-align: center
+	
+	.allowedColors
+		grid-area: 3 / 2 / 4 / 4
+		border: 2px solid black
+		text-align: center
+		.red
+			display: inline-block
+			width: .7em
+			height: .7em
+			border-radius: 50%
+			background-color: red
+
+	.input-colors
+		&__area
+			grid-area: 4 / 2 / 5 / 3
+			background-color: yellow
 		&__accept-button
-			width: 140px
-			height: 140px
-			border: 2px solid blue
+			grid-area: 4 / 3 / 5 / 4
+			background-color: blue
+			&__text
+				font-size: 2rem
+				text-align: center
+				padding: 2.5rem 0
 
-.letterNumber3
-	color: red
+	.output-text
+		grid-area: 5 / 2 / 6 / 4
+		text-align: justify

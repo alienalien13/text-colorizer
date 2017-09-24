@@ -90,64 +90,68 @@ var getById = function getById(id) {
 // global funcs
 var init = function init() {
 
-	// DOM elements / their values
-	var text = getById('text').innerText,
-	    accept = getById('accept');
+	var string = getById('text').innerText.split(' '),
+	    // input text
+	accept = getById('accept'); // accept button
 
 	// main function
-	function textTransform() {
+	function textTransform(colors) {
 
-		// input text
-		var string = text.split(' ');
-
-		var actualColor = 0;
+		var actualColor = 0; // actualColor value init
 
 		// set random color from colors-arguments
-		function setColor(gotten_colors) {
+		function setColor(gottenColors) {
 
 			function getRandom() {
-				var rand = Math.floor(Math.random() * gotten_colors.length);
+				var rand = Math.floor(Math.random() * gottenColors.length);
 				if (rand === actualColor) return getRandom();else return rand;
 			}
 
-			/* (gotten_colors.length < 2) ? actualColor = 0 :  */actualColor = getRandom();
-			return gotten_colors[actualColor];
+			if (gottenColors.length > 1) {
+				actualColor = getRandom();
+				return gottenColors[actualColor];
+			} else if (gottenColors.length === 1) return gottenColors[0];
 		}
 
-		/*
-  	output text
-  	each word in string to array of letters
-  	each letter to span
-  	join letters back to words
-  	join words separated by ' '
-  */
-		var newStr = string.map(function (word) {
-			return word.split('').map(function (symbol) {
-				return '<span style="color: ' + setColor(getColors(getById('colors').value)) + '">' + symbol + '</span>';
-			}).join('');
-		}).join(' ');
+		var newString = string.map(function (word) {
+			return (// words array
+				word.split('') // symbols array
+				.map(function (symbol) {
+					return '<span style="color: ' + setColor(colors) + '">' + symbol + '</span>';
+				}) // transform symbol to <span>
+				.join('')
+			);
+		}) // join symbols to words
+		.join(' '); // join words to string
 
-		getById('text2').innerHTML = newStr;
-
-		log(getColors(getById('colors').value));
+		getById('text').innerHTML = newString;
 	}
 
-	accept.addEventListener('click', textTransform);
+	accept.addEventListener('click', function () {
+
+		var allowedColors = ['red', 'black', 'gray', 'green', 'yellow', 'silver', 'blue', 'gold', 'white'],
+		    unexpectedSymbols = getById('colors').value.match(/[^a-zA-Z\s\n,;\u000A]/ig);
+
+		unexpectedSymbols || !getById('colors').value ? log('ERROR', unexpectedSymbols ? new Set(unexpectedSymbols) : 'EMPTY') : textTransform(getColors(getById('colors').value, allowedColors));
+
+		log(getColors(getById('colors').value, allowedColors));
+	});
 };
 
 // getting colors array from input textarea
-var getColors = function getColors(inputColorsList) {
-
-	var newList = inputColorsList.split('').map(function (item) {
-		return item === ',' || item === ';' || item === '\n' ? ' ' : item;
-	}).join('').split(' ').filter(function (item) {
-		return item !== '';
-	});
-
-	var colorsList = new Set(newList);
-
-	return Array.from(colorsList);
+var getColors = function getColors(inputColorsList, allowableColors) {
+	return Array.from(new Set(inputColorsList.split('') // symbols array
+	.map(function (symbol) {
+		return symbol === ',' || symbol === ';' || symbol === '\n' ? ' ' : symbol;
+	}) // replace ',' ';' and 'line break' with spacees
+	.join('') // get single line string
+	.split(' ') // get words
+	.filter(function (item) {
+		return item !== '' && allowableColors.indexOf(item) !== -1;
+	}) // filter empty items in array and just allowed colors
+	));
 };
+
 // - - - - - - - - - - - - - - - - - -
 
 window.addEventListener('load', init);
