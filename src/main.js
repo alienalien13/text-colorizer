@@ -53,11 +53,15 @@ const init = () => {
 			join letters back to words
 			join words separated by ' '
 		*/
-		const newStr = string.map( word => word.split('').map( symbol => {
+		const newStr = string.map( word =>
+			word.split('')
+			.map( symbol => {
 
-			return `<span style="color: ${setColor(['red', 'blue', 'green', 'black', 'yellow'])}">${symbol}</span>`;
+				return `<span style="color: ${setColor(['red', 'blue', 'green', 'black', 'yellow'])}">${symbol}</span>`;
 
-		} ).join('') ).join(' ');
+			} )
+			.join('') )
+			.join(' ');
 
 		getById('text2').innerHTML = newStr;
 
@@ -70,12 +74,12 @@ const init = () => {
 
 const getColors = inputColorsList => {
 
-	return trim( inputColorsList.split('').map( item => {
+	return inputColorsList.split('').map( item => {
 
 		if (item === ',' || item === ';' || item === '') return ' '
 		else return item
 
-	} ).join('') )
+	} ).join('').split(' ').filter( item => item !== '')
 
 }
 

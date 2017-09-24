@@ -149,10 +149,12 @@ var init = function init() {
 
 var getColors = function getColors(inputColorsList) {
 
-	return trim(inputColorsList.split('').map(function (item) {
+	return inputColorsList.split('').map(function (item) {
 
 		if (item === ',' || item === ';' || item === '') return ' ';else return item;
-	}).join(''));
+	}).join('').split(' ').filter(function (item) {
+		return item !== '';
+	});
 };
 
 // - - - - - - - - - - - - - - - - - -
