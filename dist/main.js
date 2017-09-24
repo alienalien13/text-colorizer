@@ -83,33 +83,22 @@ __webpack_require__(2);
 var getById = function getById(id) {
 	return document.getElementById(id);
 },
-    getByClass = function getByClass(className) {
-	return document.getElementsByClassName(className);
-},
     log = console.log;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-// addons
-var trim = function trim(str) {
-	return str.replace(/^\s+|\s+$/g, "");
-};
 // - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 // global funcs
 var init = function init() {
 
-	// DOM elements
-	var text = getById('text'),
-	    colors = getById('colors'),
+	// DOM elements / their values
+	var text = getById('text').innerText,
 	    accept = getById('accept');
 
 	// main function
 	function textTransform() {
 
 		// input text
-		var string = text.innerText.split(' ');
+		var string = text.split(' ');
 
 		var actualColor = 0;
 
@@ -121,7 +110,7 @@ var init = function init() {
 				if (rand === actualColor) return getRandom();else return rand;
 			}
 
-			actualColor = getRandom();
+			/* (gotten_colors.length < 2) ? actualColor = 0 :  */actualColor = getRandom();
 			return gotten_colors[actualColor];
 		}
 
@@ -134,8 +123,7 @@ var init = function init() {
   */
 		var newStr = string.map(function (word) {
 			return word.split('').map(function (symbol) {
-
-				return '<span style="color: ' + setColor(['red', 'blue', 'green', 'black', 'yellow']) + '">' + symbol + '</span>';
+				return '<span style="color: ' + setColor(getColors(getById('colors').value)) + '">' + symbol + '</span>';
 			}).join('');
 		}).join(' ');
 
@@ -147,16 +135,19 @@ var init = function init() {
 	accept.addEventListener('click', textTransform);
 };
 
+// getting colors array from input textarea
 var getColors = function getColors(inputColorsList) {
 
-	return inputColorsList.split('').map(function (item) {
-
-		if (item === ',' || item === ';' || item === '') return ' ';else return item;
+	var newList = inputColorsList.split('').map(function (item) {
+		return item === ',' || item === ';' || item === '\n' ? ' ' : item;
 	}).join('').split(' ').filter(function (item) {
 		return item !== '';
 	});
-};
 
+	var colorsList = new Set(newList);
+
+	return Array.from(colorsList);
+};
 // - - - - - - - - - - - - - - - - - -
 
 window.addEventListener('load', init);

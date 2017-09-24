@@ -4,14 +4,7 @@ import './styles.sass'
 
 // aux functions
 const getById = id => document.getElementById(id),
-	getByClass = className => document.getElementsByClassName(className),
 	log = console.log;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-
-// addons
-const trim = str => str.replace(/^\s+|\s+$/g, "");
 // - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
@@ -19,16 +12,15 @@ const trim = str => str.replace(/^\s+|\s+$/g, "");
 // global funcs
 const init = () => {
 
-	// DOM elements
-	const text = getById('text'),
-		colors = getById('colors'),
+	// DOM elements / their values
+	const text = getById('text').innerText,
 		accept = getById('accept');
 
 	// main function
 	function textTransform(){
 
 		// input text
-		const string = text.innerText.split(' ');
+		const string = text.split(' ');
 
 		let actualColor = 0;
 
@@ -41,7 +33,7 @@ const init = () => {
 				else return rand
 			}
 
-			actualColor = getRandom();			
+			/* (gotten_colors.length < 2) ? actualColor = 0 :  */actualColor = getRandom();			
 			return gotten_colors[actualColor];
 
 		}
@@ -55,34 +47,44 @@ const init = () => {
 		*/
 		const newStr = string.map( word =>
 			word.split('')
-			.map( symbol => {
+			.map( symbol =>
 
-				return `<span style="color: ${setColor(['red', 'blue', 'green', 'black', 'yellow'])}">${symbol}</span>`;
+				`<span style="color: ${setColor( getColors( getById('colors').value ) )}">${symbol}</span>`
 
-			} )
+			)
 			.join('') )
 			.join(' ');
 
 		getById('text2').innerHTML = newStr;
 
-		log( getColors(getById('colors').value) )
+		log(getColors( getById('colors').value ))
 	}
 
 	accept.addEventListener('click', textTransform);
 
 }
 
+// getting colors array from input textarea
 const getColors = inputColorsList => {
 
-	return inputColorsList.split('').map( item => {
+	let newList = inputColorsList
+		.split('')
+		.map( item => 
 
-		if (item === ',' || item === ';' || item === '') return ' '
-		else return item
+			(item === ',' || item === ';' || item === '\u000A') ?
+			' ' :
+			item
 
-	} ).join('').split(' ').filter( item => item !== '')
+		)
+		.join('')
+		.split(' ')
+		.filter( item => item !== '')
+
+	let colorsList = new Set(newList)
+
+	return Array.from(colorsList)
 
 }
-
 // - - - - - - - - - - - - - - - - - -
 
 window.addEventListener('load', init);
