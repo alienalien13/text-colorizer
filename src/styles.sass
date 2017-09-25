@@ -1,44 +1,89 @@
 body
 	width: 100%
-	height: 100%
+	height: 100vh
 	margin: 0
 	padding: 0
 	display: grid
-	grid-template: 100px 40px 40px 0.5fr 0.5fr 50px / 0.5fr 30% 30% 0.5fr
-	grid-gap: 10px
+	grid-template: 150px .1fr .1fr .3fr .1fr .4fr 1fr / .5fr 30% 30% .5fr
+	grid-gap: 2em
 
 	header
 		grid-area: 1 / 1 / 2 / 6
 		background-color: silver
+		text-align: center
+		font-size: 2rem
+		font-weight: 900
+		padding: 3rem
+		background: linear-gradient(270deg, #00ffe6, #77ff00, #ff00b6)
+		text-shadow: 2px 2px 0 white
 	
-	.errors
+	#errors
 		grid-area: 2 / 2 / 3 / 4
-		background-color: black
 		text-align: center
 	
 	.allowedColors
 		grid-area: 3 / 2 / 4 / 4
-		border: 2px solid black
 		text-align: center
-		.red
+		padding: 1.1rem
+		span
 			display: inline-block
 			width: .7em
 			height: .7em
 			border-radius: 50%
-			background-color: red
+			border: .2px solid black
 
 	.input-colors
 		&__area
 			grid-area: 4 / 2 / 5 / 3
-			background-color: yellow
+			border-radius: 5px
+			resize: none
 		&__accept-button
 			grid-area: 4 / 3 / 5 / 4
-			background-color: blue
+			border-radius: 5px
+			box-shadow: inset 0 0 5px 2px black
 			&__text
 				font-size: 2rem
 				text-align: center
 				padding: 2.5rem 0
+			&:active
+				box-shadow: inset 0 0 5px 3px black
+
+	#accepted-colors
+		grid-area: 5 / 2 / 6 / 4
+		padding: 1.1rem 0
+		text-align: center
+		span
+			display: inline-block
+			width: .7em
+			height: .7em
+			border-radius: 50%
+			border: .2px solid black
 
 	.output-text
-		grid-area: 5 / 2 / 6 / 4
+		grid-area: 6 / 2 / 7 / 4
 		text-align: justify
+	
+	footer
+		grid-area: 7 / 1 / 8 / 6
+		background-color: gray
+		color: white
+		padding: .5rem
+
+.red
+	background-color: red
+.black
+	background-color: black
+.gray
+	background-color: gray
+.green
+	background-color: green
+.yellow
+	background-color: yellow
+.silver
+	background-color: silver
+.blue
+	background-color: blue
+.gold
+	background-color: gold
+.white
+	background-color: white

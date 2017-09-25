@@ -6,16 +6,37 @@ html(lang="en")
 		title Document
 	body
 		header
+			|Text colorizer!
 
-		.errors
+		#errors
 		.allowedColors Allowed colors: 
 			span.red
-			| red,
-			span.black black, gray, green, yellow, silver, blue, gold, white
+			|&nbsp;red,&nbsp;
+			span.black
+			|&nbsp;black,&nbsp;
+			span.gray
+			|&nbsp;gray,&nbsp;
+			span.green
+			|&nbsp;green,&nbsp;
+			span.yellow
+			|&nbsp;yellow,&nbsp;
+			span.silver
+			|&nbsp;silver,&nbsp;
+			span.blue
+			|&nbsp;blue,&nbsp;
+			span.gold
+			|&nbsp;gold,&nbsp;
+			span.white
+			|&nbsp;white&nbsp;
 
-		textarea(name="input", cols="30", rows="10", class="input-colors input-colors__area", id="colors")
+		textarea(name="input", class="input-colors input-colors__area", placeholder="Fill in colors you want to colorize the text below separeted by comma, semicolon, space or line break", id="colors")
 		.input-colors.input-colors__accept-button#accept
 			.input-colors__accept-button__text GO!
 
+		#accepted-colors
+
 		.output-text#text
 			| Lorem, ipsum dolor sit amet consectetur adipisicing elit. Provident delectus minus perspiciatis accusamus quaerat nemo ut repudiandae at vero totam error nostrum, dolores eaque deleniti, maiores inventore fugiat! Qui, labore?Amet eum neque necessitatibus non corrupti quidem cum optio odio suscipit modi autem vero, beatae numquam pariatur a recusandae minus nihil fugit? Deleniti, animi asperiores accusamus aperiam sit dignissimos sapiente!Quasi fugit possimus, aliquid animi modi ipsa. Harum neque dolorem placeat nihil animi minus sequi odit temporibus! Cumque adipisci sed voluptatum quos quis ab velit minima sunt. Nihil, tempore sapiente?
+		
+		footer
+			|Dmytro Ilhanaiev

@@ -24,7 +24,7 @@ const init = () => {
 		function setColor(gottenColors){
 
 			function getRandom(){
-				let rand = Math.floor( Math.random() * (gottenColors.length) );
+				let rand = Math.floor( Math.random() * gottenColors.length );
 				if (rand === actualColor) return getRandom()
 				else return rand
 			}
@@ -46,26 +46,27 @@ const init = () => {
 				.join('') ) // join symbols to words
 				.join(' '); // join words to string
 
-		getById('text').innerHTML = newString;
-
+		getById('text').innerHTML = newString; // output
+			
+		getById('accepted-colors').innerHTML = 'Accepted colors:' + colors.map( color => `&nbsp;<span class='${color}'></span>&nbsp;${color}` )  // write what colors were accepted
 	}
 
 	accept.addEventListener('click', function(){
 
+		getById('errors').innerHTML = '';
+
 		let allowedColors = ['red', 'black', 'gray', 'green', 'yellow', 'silver', 'blue', 'gold', 'white'],
-			unexpectedSymbols = (getById('colors').value.match(/[^a-zA-Z\s\n,;\u000A]/ig));
+			unexpectedSymbols = ( getById('colors').value.match(/[^a-zA-Z\s\n,;\u000A]/ig) );
 
 		(unexpectedSymbols || !getById('colors').value) ?
-		log('ERROR', unexpectedSymbols ? new Set(unexpectedSymbols) :'EMPTY') :
-		textTransform( getColors( getById('colors').value , allowedColors) );
-
-		log( getColors( getById('colors').value, allowedColors ) )
+		getById('errors').innerHTML = 'ERROR - ' + ( unexpectedSymbols ? 'unexpected symbols: ' + Array.from( new Set(unexpectedSymbols) ) :'text area is empty' ) : // write errors
+		textTransform( getColors( getById('colors').value , allowedColors ) ); // call main function
 
 	});
 
 }
 
-// getting colors array from input textarea
+// getting colors array
 const getColors = (inputColorsList, allowableColors) => Array.from(
 
 	new Set(
@@ -73,9 +74,7 @@ const getColors = (inputColorsList, allowableColors) => Array.from(
 			.split('') // symbols array
 			.map( symbol => 
 
-				(symbol === ',' || symbol === ';' || symbol === '\u000A') ?
-				' ' :
-				symbol
+				(symbol === ',' || symbol === ';' || symbol === '\u000A') ? ' ' : symbol
 
 			) // replace ',' ';' and 'line break' with spacees
 			.join('') // get single line string
